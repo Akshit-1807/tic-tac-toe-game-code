@@ -1,0 +1,113 @@
+import random
+
+# Tic-Tac-Toe Game
+
+# Create the board
+board = [[' ' for _ in range(3)] for _ in range(3)]
+
+# Function to display the board
+def display_board():
+    for row in board:
+        print('|'.join(row))
+        print('-' * 5)
+
+# Function to check if any player has won
+def check_winner(player):
+    # Check rows
+    for row in board:
+        if all(symbol == player for symbol in row):
+            return True
+
+    # Check columns
+    for col in range(3):
+        if all(board[row][col] == player for row in range(3)):
+            return True
+
+    # Check diagonals
+    if board[0][0] == board[1][1] == board[2][2] == player:
+        return True
+    if board[0][2] == board[1][1] == board[2][0] == player:
+        return True
+
+    return False
+
+# Function to check if the board is full
+def is_board_full():
+    for row in board:
+        if ' ' in row:
+            return False
+    return True
+
+# Function for bot's move
+def bot_move():
+    while True:
+        row = random.randint(0, 2)
+        col = random.randint(0, 2)
+
+        if board[row][col] == ' ':
+            board[row][col] = 'O'
+            break
+
+# Main game loop
+def play_game():
+    display_board()
+
+    while True:
+        # User's move
+        while True:
+            try:
+                row = int(input("Enter the row (0-2): "))
+                if row < 0 or row > 2:
+                    raise ValueError()
+                break
+            except ValueError:
+                print("Invalid row! Please enter a number between 0 and 2.")
+
+        while True:
+            try:
+                col = int(input("Enter the column (0-2): "))
+                if col < 0 or col > 2:
+                    raise ValueError()
+                break
+            except ValueError:
+                print("Invalid column! Please enter a number between 0 and 2.")
+
+        # Validate the user's move
+        if board[row][col] != ' ':
+            print("Invalid move! Try again.")
+            continue
+
+        # Update the board with the user's move
+        board[row][col] = 'X'
+
+        # Display the updated board
+        display_board()
+
+        # Check if the user wins
+        if check_winner('X'):
+            print("Congratulations! You win!")
+            break
+
+        # Check if the board is full
+        if is_board_full():
+            print("It's a tie!")
+            break
+
+        # Bot's move
+        bot_move()
+
+        # Display the updated board
+        display_board()
+
+        # Check if the bot wins
+        if check_winner('O'):
+            print("Sorry, you lose!")
+            break
+
+        # Check if the board is full
+        if is_board_full():
+            print("It's a tie!")
+            break
+
+# Start the game
+play_game()
